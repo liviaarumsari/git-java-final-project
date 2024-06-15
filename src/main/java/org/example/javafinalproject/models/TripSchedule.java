@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "trip_schedules")
@@ -26,6 +28,9 @@ public class TripSchedule {
     @ManyToOne
     @JoinColumn(name = "trip_id")
     private Trip tripDetail;
+
+    @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Ticket> tickets = new HashSet<>();
 
     public TripSchedule() {
     }
