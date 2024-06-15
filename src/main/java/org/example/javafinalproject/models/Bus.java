@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "buses")
 @Getter
@@ -25,4 +28,17 @@ public class Bus {
     @ManyToOne
     @JoinColumn(name = "agency_id")
     private Agency agency;
+
+    @OneToMany(mappedBy = "bus", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Trip> trips = new HashSet<>();
+
+    public Bus() {
+    }
+
+    public Bus(String code, int capacity, String make, Agency agency) {
+        this.code = code;
+        this.capacity = capacity;
+        this.make = make;
+        this.agency = agency;
+    }
 }

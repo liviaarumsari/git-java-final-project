@@ -32,6 +32,9 @@ public class Agency {
     @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Bus> buses = new HashSet<>();
 
+    @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Trip> trips = new HashSet<>();
+
     public Agency() {
     }
 
