@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: java-final-project
+
+  datasource:
+    url: jdbc:postgresql://p-coreautomaton:5432/java-final-project
+    username: postgres
+    password: postgres
+
+  jpa:
+    hibernate:
+      ddl-auto: update
