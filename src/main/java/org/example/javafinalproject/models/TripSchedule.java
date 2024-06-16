@@ -29,7 +29,7 @@ public class TripSchedule {
     @JoinColumn(name = "trip_id")
     private Trip tripDetail;
 
-    @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "tripSchedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Ticket> tickets = new HashSet<>();
 
     public TripSchedule() {
