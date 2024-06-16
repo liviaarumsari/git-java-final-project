@@ -10,3 +10,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+java-final-project:
+  app:
+    jwtCookieName: java-final-project-cookie
+    jwtSecret: SV8S1xuBCVf8XC0QNebM7pkAjpGg2zA5t3RQ5NbXX6w9u6K7SGF5GUhMASpHWYLe
+    jwtExpirationMs: 86400000
