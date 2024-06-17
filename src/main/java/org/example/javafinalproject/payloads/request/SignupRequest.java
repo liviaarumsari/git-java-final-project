@@ -11,27 +11,27 @@ import java.util.Set;
 @Setter
 @Getter
 public class SignupRequest {
-    @NotBlank
-    @Size(max = 50)
-    @Email
+    @NotBlank(message = "Email is mandatory")
+    @Size(max = 50, message = "Email must be less than 50 characters")
+    @Email(message = "Email should be valid")
     private String email;
 
-    @NotBlank
-    @Size(min = 1, max = 255)
+    @NotBlank(message = "First name is mandatory")
+    @Size(min = 1, max = 255, message = "First name must be between 1 and 255 characters")
     private String firstName;
 
-    @NotBlank
-    @Size(min = 1, max = 255)
+    @NotBlank(message = "Last name is mandatory")
+    @Size(min = 1, max = 255, message = "Last name must be between 1 and 255 characters")
     private String lastName;
 
-    @NotBlank
-    @Size(min = 1, max = 20)
+    @NotBlank(message = "Mobile number is mandatory")
+    @Size(min = 1, max = 20, message = "Mobile number must be between 1 and 20 characters")
     private String mobileNumber;
 
     private Set<String> role;
 
-    @NotBlank
-    @Size(min = 6, max = 40)
+    @NotBlank(message = "Password is mandatory")
+    @Size(min = 6, max = 40, message = "Password must be between 6 and 40 characters")
     private String password;
 }
 
