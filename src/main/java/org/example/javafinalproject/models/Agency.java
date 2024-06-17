@@ -1,5 +1,6 @@
 package org.example.javafinalproject.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -27,6 +28,7 @@ public class Agency {
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
+    @JsonBackReference
     private User owner;
 
     @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL, orphanRemoval = true)
