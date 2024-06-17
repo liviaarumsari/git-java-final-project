@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -36,10 +37,16 @@ public class AgencyController {
 
     @PostMapping("")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> createAgency(@Valid @RequestBody CreateAgencyRequest createAgencyRequest, Principal principal) {
+    public ResponseEntity<?> createAgency(@Valid @RequestBody CreateAgencyRequest createAgencyRequest, BindingResult bindingResult, Principal principal) {
         String userEmail = principal.getName();
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with email: " + userEmail));
+
+        if (bindingResult.hasErrors()) {
+            StringBuilder errorMessage = new StringBuilder();
+            bindingResult.getAllErrors().forEach(error -> errorMessage.append(error.getDefaultMessage()).append(". "));
+            return ResponseEntity.badRequest().body(ApiResponseBuilder.buildErrorResponse(errorMessage.toString()));
+        }
 
         Agency newAgency = new Agency(createAgencyRequest.getCode(), createAgencyRequest.getName(), createAgencyRequest.getDetails(), user);
         agencyRepository.save(newAgency);
