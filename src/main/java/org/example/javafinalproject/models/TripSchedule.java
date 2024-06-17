@@ -1,5 +1,7 @@
 package org.example.javafinalproject.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -27,9 +29,11 @@ public class TripSchedule {
 
     @ManyToOne
     @JoinColumn(name = "trip_id")
+    @JsonBackReference
     private Trip tripDetail;
 
     @OneToMany(mappedBy = "tripSchedule", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private Set<Ticket> tickets = new HashSet<>();
 
     public TripSchedule() {
