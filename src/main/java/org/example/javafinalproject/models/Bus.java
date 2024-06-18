@@ -1,9 +1,9 @@
 package org.example.javafinalproject.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,7 +22,7 @@ public class Bus {
     @NotBlank
     private String code;
 
-    @NotBlank
+    @NotNull
     private int capacity;
 
     private String make;
@@ -33,7 +33,7 @@ public class Bus {
     private Agency agency;
 
     @OneToMany(mappedBy = "bus", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonBackReference
     private Set<Trip> trips = new HashSet<>();
 
     public Bus() {

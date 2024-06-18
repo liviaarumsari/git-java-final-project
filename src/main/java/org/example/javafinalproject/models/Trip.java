@@ -28,22 +28,20 @@ public class Trip {
 
     @ManyToOne
     @JoinColumn(name = "source_stop_id")
-    @JsonBackReference
     private Stop sourceStop;
 
     @ManyToOne
     @JoinColumn(name = "dest_stop_id")
-    @JsonBackReference
     private Stop destStop;
 
     @ManyToOne
     @JoinColumn(name = "bus_id")
-    @JsonBackReference
+    @JsonManagedReference
     private Bus bus;
 
     @ManyToOne
     @JoinColumn(name = "agency_id")
-    @JsonBackReference
+    @JsonManagedReference
     private Agency agency;
 
     @OneToMany(mappedBy = "tripDetail", cascade = CascadeType.ALL, orphanRemoval = true)

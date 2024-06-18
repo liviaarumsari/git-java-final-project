@@ -6,8 +6,10 @@ import org.example.javafinalproject.models.*;
 import org.example.javafinalproject.payloads.request.CreateTripRequest;
 import org.example.javafinalproject.payloads.response.ApiResponseBuilder;
 import org.example.javafinalproject.repository.*;
+import org.example.javafinalproject.specifications.TripSpecs;
 import org.example.javafinalproject.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -91,5 +95,22 @@ public class TripController {
         trip.setTripSchedules(tripSchedules);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponseBuilder.buildSuccessResponse(trip, "Trip created successfully!"));
+    }
+
+    @GetMapping("")
+    public ResponseEntity<List<Trip>> getAllTrips(
+            @RequestParam(required = false) Long sourceStop,
+            @RequestParam(required = false) Long destStop,
+            @RequestParam(required = false) String tripDate) {
+
+        LocalDate parsedTripDate = tripDate != null ? DateUtil.parseDate(tripDate) : null;
+
+        List<Trip> trips = tripRepository.findAll(Specification.where(
+                TripSpecs.hasSourceStop(sourceStop)
+                        .and(TripSpecs.hasDestStop(destStop))
+                        .and(TripSpecs.hasTripDate(parsedTripDate))
+        ));
+
+        return ResponseEntity.ok(trips);
     }
 }

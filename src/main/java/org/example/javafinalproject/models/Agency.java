@@ -33,11 +33,11 @@ public class Agency {
     private User owner;
 
     @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonBackReference
     private Set<Bus> buses = new HashSet<>();
 
     @OneToMany(mappedBy = "agency", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonBackReference
     private Set<Trip> trips = new HashSet<>();
 
     public Agency() {
