@@ -19,6 +19,6 @@ public class SwaggerConfig {
 
     @Bean
     OpenAPI customOpenAPI() {
-        return new OpenAPI().info(new Info().title("API title").version("v1")).addSecurityItem(new SecurityRequirement().addList("bearerAuth")).components(new Components().addSecuritySchemes("cookie", new SecurityScheme().type(SecurityScheme.Type.APIKEY).in(SecurityScheme.In.COOKIE).name("java-final-project-cookie")));
+        return new OpenAPI().info(new Info().title("Java Final Project API").version("v1")).addSecurityItem(new SecurityRequirement().addList("bearerAuth")).components(new Components().addSecuritySchemes("cookie", new SecurityScheme().type(SecurityScheme.Type.APIKEY).in(SecurityScheme.In.COOKIE).name("java-final-project-cookie")));
     }
 }
