@@ -6,6 +6,7 @@ import org.example.javafinalproject.models.Role;
 import org.example.javafinalproject.models.User;
 import org.example.javafinalproject.payloads.request.LoginRequest;
 import org.example.javafinalproject.payloads.request.SignupRequest;
+import org.example.javafinalproject.payloads.response.ApiResponseBuilder;
 import org.example.javafinalproject.payloads.response.MessageResponse;
 import org.example.javafinalproject.payloads.response.UserInfoResponse;
 import org.example.javafinalproject.repository.RoleRepository;
@@ -71,18 +72,17 @@ public class AuthController {
                     .map(item -> item.getAuthority())
                     .collect(Collectors.toList());
 
-            logger.debug("Successfully authenticated user with email: " + loginRequest.getEmail() + " " + userDetails.getMobileNumber());
+            UserInfoResponse response = new UserInfoResponse(userDetails.getId(),
+                    userDetails.getEmail(),
+                    userDetails.getFirstName(),
+                    userDetails.getLastName(),
+                    userDetails.getMobileNumber(),
+                    roles);
 
             return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                    .body(new UserInfoResponse(userDetails.getId(),
-                            userDetails.getEmail(),
-                            userDetails.getFirstName(),
-                            userDetails.getLastName(),
-                            userDetails.getMobileNumber(),
-                            roles));
+                    .body(ApiResponseBuilder.buildSuccessResponse(response));
         } catch (Exception e) {
-            logger.error("Failed to authenticate user with email: {}", loginRequest.getEmail(), e);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Bad credentials");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponseBuilder.buildErrorResponse("Bad credentials"));
         }
     }
 
@@ -95,11 +95,7 @@ public class AuthController {
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already taken!"));
-        }
-
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
+            return ResponseEntity.badRequest().body(ApiResponseBuilder.buildErrorResponse("Error: Email is already taken!"));
         }
 
         // Create new user's account
@@ -130,13 +126,13 @@ public class AuthController {
         user.setRoles(roles);
         userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return ResponseEntity.ok().body(ApiResponseBuilder.buildSuccessResponse("User registered successfully!"));
     }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logoutUser() {
         ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(new MessageResponse("You've been signed out!"));
+                .body(ApiResponseBuilder.buildSuccessResponse("You've been signed out!"));
     }
 }
