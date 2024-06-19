@@ -3,9 +3,9 @@ spring:
     name: java-final-project
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/java-final-project
+    url: jdbc:postgresql://monorail.proxy.rlwy.net:22316/railway
     username: postgres
-    password: root
+    password: PDKYwhXWFTTpODueMwiYjVQmnTprbMgn
 
   jpa:
     hibernate:
