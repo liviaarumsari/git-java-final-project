@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true)
@@ -64,7 +65,9 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/auth/**").permitAll().requestMatchers(SWAGGER_WHITELIST).permitAll()
+                        auth.requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers(SWAGGER_WHITELIST).permitAll()
+                                .requestMatchers("/", "/home", "/signup", "/login", "/css/**", "/js/**", "/images/**").permitAll()
                                 .anyRequest().authenticated()
                 );
 
@@ -73,4 +76,9 @@ public class WebSecurityConfig {
 
         return http.build();
     }
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+
 }
