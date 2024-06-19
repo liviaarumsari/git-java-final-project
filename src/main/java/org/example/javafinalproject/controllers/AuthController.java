@@ -58,7 +58,7 @@ public class AuthController {
         if (bindingResult.hasErrors()) {
             StringBuilder errorMessage = new StringBuilder();
             bindingResult.getAllErrors().forEach(error -> errorMessage.append(error.getDefaultMessage()).append(". "));
-            return ResponseEntity.badRequest().body(errorMessage.toString());
+            return ResponseEntity.badRequest().body(ApiResponseBuilder.buildErrorResponse(errorMessage.toString()));
         }
         try {
             UserDetailsImpl userDetails = authenticateService.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
@@ -91,7 +91,7 @@ public class AuthController {
         if (bindingResult.hasErrors()) {
             StringBuilder errorMessage = new StringBuilder();
             bindingResult.getAllErrors().forEach(error -> errorMessage.append(error.getDefaultMessage()).append(". "));
-            return ResponseEntity.badRequest().body(errorMessage.toString());
+            return ResponseEntity.badRequest().body(ApiResponseBuilder.buildErrorResponse(errorMessage.toString()));
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {

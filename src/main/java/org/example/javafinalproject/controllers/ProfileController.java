@@ -3,7 +3,7 @@ package org.example.javafinalproject.controllers;
 import jakarta.validation.Valid;
 import org.example.javafinalproject.models.User;
 import org.example.javafinalproject.payloads.request.ProfileUpdateRequest;
-import org.example.javafinalproject.payloads.response.MessageResponse;
+import org.example.javafinalproject.payloads.response.ApiResponseBuilder;
 import org.example.javafinalproject.payloads.response.UserInfoResponse;
 import org.example.javafinalproject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +38,14 @@ public class ProfileController {
                 .map(item -> item.getRole().toString())
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok().body(new UserInfoResponse(user.getId(),
+        UserInfoResponse response = new UserInfoResponse(user.getId(),
                 user.getEmail(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getMobileNumber(),
-                roles));
+                roles);
+
+        return ResponseEntity.ok().body(ApiResponseBuilder.buildSuccessResponse(response));
     }
 
     @PutMapping("")
@@ -68,6 +70,6 @@ public class ProfileController {
 
         userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse("Profile updated successfully!"));
+        return ResponseEntity.ok(ApiResponseBuilder.buildSuccessResponse("Profile updated successfully!"));
     }
 }
