@@ -18,8 +18,8 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    private String seatNumber;
+    @NotNull
+    private Integer seatNumber;
 
     @NotNull
     private boolean cancellable;
