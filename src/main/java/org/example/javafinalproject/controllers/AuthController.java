@@ -7,7 +7,6 @@ import org.example.javafinalproject.models.User;
 import org.example.javafinalproject.payloads.request.LoginRequest;
 import org.example.javafinalproject.payloads.request.SignupRequest;
 import org.example.javafinalproject.payloads.response.ApiResponseBuilder;
-import org.example.javafinalproject.payloads.response.MessageResponse;
 import org.example.javafinalproject.payloads.response.UserInfoResponse;
 import org.example.javafinalproject.repository.RoleRepository;
 import org.example.javafinalproject.repository.UserRepository;
