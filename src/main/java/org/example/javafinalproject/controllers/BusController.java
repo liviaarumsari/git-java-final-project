@@ -1,6 +1,7 @@
 package org.example.javafinalproject.controllers;
 
 import jakarta.validation.Valid;
+import org.example.javafinalproject.exception.ResourceNotFoundException;
 import org.example.javafinalproject.models.Agency;
 import org.example.javafinalproject.models.Bus;
 import org.example.javafinalproject.models.User;
@@ -61,5 +62,21 @@ public class BusController {
         busRepository.save(newBus);
 
         return ResponseEntity.ok().body(ApiResponseBuilder.buildSuccessResponse(newBus, "Bus created successfully!"));
+    }
+
+    @GetMapping("")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getAll(@RequestParam() Long agencyId, Principal principal) {
+        String userEmail = principal.getName();
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with email: " + userEmail));
+
+        Agency agency = agencyRepository.findById(agencyId).orElseThrow(() -> new ResourceNotFoundException("Agency not found"));
+
+        if (!Objects.equals(agency.getOwner().getId(), user.getId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponseBuilder.buildErrorResponse("Couldn't get bus list of agency that you didn't own"));
+        }
+
+        return ResponseEntity.ok().body(ApiResponseBuilder.buildSuccessResponse(agency.getBuses()));
     }
 }
