@@ -27,7 +27,7 @@ public class AgencyController {
     private UserRepository userRepository;
 
     @GetMapping("")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllAgencies(Principal principal) {
         String userEmail = principal.getName();
         User user = userRepository.findByEmail(userEmail)
@@ -36,7 +36,7 @@ public class AgencyController {
     }
 
     @PostMapping("")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createAgency(@Valid @RequestBody CreateAgencyRequest createAgencyRequest, BindingResult bindingResult, Principal principal) {
         String userEmail = principal.getName();
         User user = userRepository.findByEmail(userEmail)

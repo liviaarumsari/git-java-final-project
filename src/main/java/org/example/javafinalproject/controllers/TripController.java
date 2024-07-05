@@ -48,7 +48,7 @@ public class TripController {
     private UserRepository userRepository;
 
     @PostMapping("")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createTrip(@Valid @RequestBody CreateTripRequest createTripRequest, BindingResult bindingResult, Principal principal) {
         String userEmail = principal.getName();
         User user = userRepository.findByEmail(userEmail)

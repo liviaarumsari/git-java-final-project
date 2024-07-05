@@ -37,7 +37,7 @@ public class BusController {
     private UserRepository userRepository;
 
     @PostMapping("")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createBus(@Valid @RequestBody CreateBusRequest createBusRequest, BindingResult bindingResult, Principal principal) {
         String userEmail = principal.getName();
         User user = userRepository.findByEmail(userEmail)

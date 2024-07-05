@@ -28,7 +28,6 @@ public class ProfileController {
     private PasswordEncoder passwordEncoder;
 
     @GetMapping("")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<?> getProfile(Principal principal) {
         String userEmail = principal.getName();
         User user = userRepository.findByEmail(userEmail)
@@ -49,7 +48,6 @@ public class ProfileController {
     }
 
     @PutMapping("")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> updateProfile(@Valid @RequestBody ProfileUpdateRequest profileUpdateRequest, Principal principal) {
         String userEmail = principal.getName();
         User user = userRepository.findByEmail(userEmail)

@@ -30,7 +30,6 @@ public class TicketController {
     private UserRepository userRepository;
 
     @PostMapping("")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createTicket(@Valid @RequestBody CreateTicketRequest createTicketRequest, BindingResult bindingResult, Principal principal) {
         String userEmail = principal.getName();
         User user = userRepository.findByEmail(userEmail)

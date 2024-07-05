@@ -24,7 +24,6 @@ public class StopController {
     private UserRepository userRepository;
 
     @GetMapping("")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllStops(Principal principal) {
         String userEmail = principal.getName();
         userRepository.findByEmail(userEmail)
