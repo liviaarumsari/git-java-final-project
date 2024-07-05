@@ -22,13 +22,13 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.security.Principal;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -101,26 +101,10 @@ public class AuthController {
         User user = new User(signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()), signUpRequest.getFirstName(), signUpRequest.getLastName(), signUpRequest.getMobileNumber());
 
-        Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
-
-        if (strRoles == null) {
-            Role userRole = roleRepository.findByRole(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                if (role.equals("admin")) {
-                    Role adminRole = roleRepository.findByRole(ERole.ROLE_ADMIN)
-                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                    roles.add(adminRole);
-                } else {
-                    Role userRole = roleRepository.findByRole(ERole.ROLE_USER)
-                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                    roles.add(userRole);
-                }
-            });
-        }
+        Role userRole = roleRepository.findByRole(ERole.ROLE_USER)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+        roles.add(userRole);
 
         user.setRoles(roles);
         userRepository.save(user);
@@ -133,5 +117,23 @@ public class AuthController {
         ResponseCookie cookie = jwtUtils.getCleanJwtCookie();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(ApiResponseBuilder.buildSuccessResponse("You've been signed out!"));
+    }
+
+    @PutMapping("/admin")
+    public ResponseEntity<?> upgradeToAdmin(Principal principal) {
+        String userEmail = principal.getName();
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with email: " + userEmail));
+
+        Set<Role> roles = user.getRoles();
+
+        Role adminRole = roleRepository.findByRole(ERole.ROLE_ADMIN)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+        roles.add(adminRole);
+
+        user.setRoles(roles);
+        userRepository.save(user);
+
+        return ResponseEntity.ok().body(ApiResponseBuilder.buildSuccessResponse("User upgraded to admin successfully!"));
     }
 }

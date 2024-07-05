@@ -28,8 +28,6 @@ public class SignupRequest {
     @Size(min = 1, max = 20, message = "Mobile number must be between 1 and 20 characters")
     private String mobileNumber;
 
-    private Set<String> role;
-
     @NotBlank(message = "Password is mandatory")
     @Size(min = 6, max = 40, message = "Password must be between 6 and 40 characters")
     private String password;
