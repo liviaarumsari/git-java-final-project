@@ -97,7 +97,7 @@ public class TripController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<Trip>> getAllTrips(
+    public ResponseEntity<?> getAllTrips(
             @RequestParam(required = false) Long sourceStop,
             @RequestParam(required = false) Long destStop,
             @RequestParam(required = false) String tripDate) {
@@ -110,6 +110,6 @@ public class TripController {
                         .and(TripSpecs.hasTripDate(parsedTripDate))
         ));
 
-        return ResponseEntity.ok(trips);
+        return ResponseEntity.ok().body(ApiResponseBuilder.buildSuccessResponse(trips));
     }
 }
