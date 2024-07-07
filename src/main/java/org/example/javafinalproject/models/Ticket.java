@@ -19,12 +19,6 @@ public class Ticket {
     private Long id;
 
     @NotNull
-    private Integer seatNumber;
-
-    @NotNull
-    private boolean cancellable;
-
-    @NotNull
     @Future
     private LocalDate journeyDate;
 

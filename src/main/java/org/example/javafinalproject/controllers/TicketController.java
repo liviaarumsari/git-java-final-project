@@ -43,8 +43,6 @@ public class TicketController {
         TripSchedule tripSchedule = tripScheduleRepository.findById(createTicketRequest.getTripScheduleId()).orElseThrow(() -> new ResourceNotFoundException("Trip schedule not found"));
 
         Ticket ticket = new Ticket();
-        ticket.setSeatNumber(createTicketRequest.getSeatNumber());
-        ticket.setCancellable(createTicketRequest.getCancellable());
         ticket.setPassenger(user);
         ticket.setJourneyDate(tripSchedule.getTripDate());
         ticket.setTripSchedule(tripSchedule);
