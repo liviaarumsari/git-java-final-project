@@ -19,11 +19,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -118,9 +121,12 @@ public class TripController {
 
     @GetMapping("{id}")
     public ResponseEntity<?> getDetailTrip(@PathVariable Long id) {
-        Trip trip = tripRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Trip not found"));
-            
-        return ResponseEntity.ok().body(ApiResponseBuilder.buildSuccessResponse(trip));
+        TripSchedule tripSchedule = tripScheduleRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Trip Schedule not found"));
+
+        // Trip trip = tripRepository.findById(tripSchedule.getTripDetail().getId())
+        //     .orElseThrow(() -> new ResourceNotFoundException("Trip not found"));
+
+        return ResponseEntity.ok().body(ApiResponseBuilder.buildSuccessResponse(tripSchedule));
     }
 }

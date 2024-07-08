@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 
 public interface TripRepository extends JpaRepository<Trip, Long>, JpaSpecificationExecutor<Trip> {
-  Optional<Trip> findById(Long id);
+  Optional<Trip> findByTripSchedule(Long id);
 }
