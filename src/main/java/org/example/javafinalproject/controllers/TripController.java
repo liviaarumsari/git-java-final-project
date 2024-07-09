@@ -124,9 +124,8 @@ public class TripController {
         TripSchedule tripSchedule = tripScheduleRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Trip Schedule not found"));
 
-        // Trip trip = tripRepository.findById(tripSchedule.getTripDetail().getId())
-        //     .orElseThrow(() -> new ResourceNotFoundException("Trip not found"));
+        Trip trip = tripSchedule.getTripDetail();
 
-        return ResponseEntity.ok().body(ApiResponseBuilder.buildSuccessResponse(tripSchedule));
+        return ResponseEntity.ok().body(ApiResponseBuilder.buildSuccessResponse(trip));
     }
 }
