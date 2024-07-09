@@ -19,10 +19,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -48,7 +52,8 @@ public class TripController {
 
     @PostMapping("")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> createTrip(@Valid @RequestBody CreateTripRequest createTripRequest, BindingResult bindingResult, Principal principal) {
+    public ResponseEntity<?> createTrip(@Valid @RequestBody CreateTripRequest createTripRequest,
+            BindingResult bindingResult, Principal principal) {
         String userEmail = principal.getName();
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with email: " + userEmail));
@@ -69,7 +74,8 @@ public class TripController {
                 .orElseThrow(() -> new ResourceNotFoundException("Agency not found"));
 
         if (!Objects.equals(agency.getOwner().getId(), user.getId())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponseBuilder.buildErrorResponse("Couldn't add bus to agency that you didn't own"));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(ApiResponseBuilder.buildErrorResponse("Couldn't add bus to agency that you didn't own"));
         }
 
         Trip trip = new Trip();
@@ -93,7 +99,8 @@ public class TripController {
 
         trip.setTripSchedules(tripSchedules);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponseBuilder.buildSuccessResponse(trip, "Trip created successfully!"));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponseBuilder.buildSuccessResponse(trip, "Trip created successfully!"));
     }
 
     @GetMapping("")
@@ -107,9 +114,18 @@ public class TripController {
         List<Trip> trips = tripRepository.findAll(Specification.where(
                 TripSpecs.hasSourceStop(sourceStop)
                         .and(TripSpecs.hasDestStop(destStop))
-                        .and(TripSpecs.hasTripDate(parsedTripDate))
-        ));
+                        .and(TripSpecs.hasTripDate(parsedTripDate))));
 
         return ResponseEntity.ok().body(ApiResponseBuilder.buildSuccessResponse(trips));
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<?> getDetailTrip(@PathVariable Long id) {
+        TripSchedule tripSchedule = tripScheduleRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Trip Schedule not found"));
+
+        Trip trip = tripSchedule.getTripDetail();
+
+        return ResponseEntity.ok().body(ApiResponseBuilder.buildSuccessResponse(trip));
     }
 }
