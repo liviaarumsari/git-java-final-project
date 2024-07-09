@@ -100,7 +100,8 @@ public class TripController {
     public ResponseEntity<?> getAllTrips(
             @RequestParam(required = false) Long sourceStop,
             @RequestParam(required = false) Long destStop,
-            @RequestParam(required = false) String tripDate) {
+            @RequestParam(required = false) String tripDate,
+            @RequestParam(required = false) Long agencyId) {
 
         LocalDate parsedTripDate = tripDate != null ? DateUtil.parseDate(tripDate) : null;
 
@@ -108,6 +109,7 @@ public class TripController {
                 TripSpecs.hasSourceStop(sourceStop)
                         .and(TripSpecs.hasDestStop(destStop))
                         .and(TripSpecs.hasTripDate(parsedTripDate))
+                        .and(TripSpecs.hasAgencyId(agencyId))
         ));
 
         return ResponseEntity.ok().body(ApiResponseBuilder.buildSuccessResponse(trips));
