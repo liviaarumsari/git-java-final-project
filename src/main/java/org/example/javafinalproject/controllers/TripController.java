@@ -122,7 +122,7 @@ public class TripController {
     @GetMapping("{id}")
     public ResponseEntity<?> getDetailTrip(@PathVariable Long id) {
         TripSchedule tripSchedule = tripScheduleRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Trip Schedule not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Trip Schedule not found"));
 
         Trip trip = tripSchedule.getTripDetail();
 
