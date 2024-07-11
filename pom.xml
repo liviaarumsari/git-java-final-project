@@ -17,10 +17,15 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
+	    <dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>4.0.1</version>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.32</version>
 		</dependency>
 
 		<dependency>
@@ -59,7 +64,6 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 
-
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
@@ -92,6 +96,11 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>

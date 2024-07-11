@@ -6,6 +6,7 @@ import org.example.javafinalproject.payloads.request.ProfileUpdateRequest;
 import org.example.javafinalproject.payloads.response.ApiResponseBuilder;
 import org.example.javafinalproject.payloads.response.UserInfoResponse;
 import org.example.javafinalproject.repository.UserRepository;
+import org.example.javafinalproject.security.services.AuthenticateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -41,7 +42,8 @@ public class ProfileController {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getMobileNumber(),
-                roles);
+                roles)
+                ;
 
         return ResponseEntity.ok().body(ApiResponseBuilder.buildSuccessResponse(response));
     }
