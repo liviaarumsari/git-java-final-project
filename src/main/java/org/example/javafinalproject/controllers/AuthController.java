@@ -8,6 +8,7 @@ import org.example.javafinalproject.payloads.request.LoginRequest;
 import org.example.javafinalproject.payloads.request.SignupRequest;
 import org.example.javafinalproject.payloads.response.ApiResponseBuilder;
 import org.example.javafinalproject.payloads.response.UserInfoResponse;
+import org.example.javafinalproject.payloads.response.UserLoginResponse;
 import org.example.javafinalproject.repository.RoleRepository;
 import org.example.javafinalproject.repository.UserRepository;
 import org.example.javafinalproject.security.jwt.JwtUtils;
@@ -60,29 +61,32 @@ public class AuthController {
         }
         try {
             UserDetailsImpl userDetails = authenticateService.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
-
+    
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
+    
             ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
-
+            String jwtToken = jwtUtils.generateTokenFromUsername(userDetails.getUsername());
+    
             List<String> roles = userDetails.getAuthorities().stream()
                     .map(item -> item.getAuthority())
                     .collect(Collectors.toList());
-
-            UserInfoResponse response = new UserInfoResponse(userDetails.getId(),
+    
+            UserLoginResponse response = new UserLoginResponse(userDetails.getId(),
                     userDetails.getEmail(),
                     userDetails.getFirstName(),
                     userDetails.getLastName(),
                     userDetails.getMobileNumber(),
-                    roles);
-
-            return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+                    roles,
+                    jwtToken); 
+    
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                     .body(ApiResponseBuilder.buildSuccessResponse(response));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ApiResponseBuilder.buildErrorResponse("Bad credentials"));
         }
-    }
+    }    
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest, BindingResult bindingResult) {
