@@ -3,6 +3,7 @@ package org.example.javafinalproject.models;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -30,6 +31,7 @@ public class User {
 
     @NotBlank
     @Size(max = 120)
+    @JsonIgnore
     private String password;
 
     @NotBlank
@@ -50,6 +52,7 @@ public class User {
     private Set<Agency> agencies = new HashSet<>();
 
     @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<Ticket> tickets = new HashSet<>();
 
     public User() {

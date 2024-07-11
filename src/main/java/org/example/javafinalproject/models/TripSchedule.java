@@ -33,7 +33,7 @@ public class TripSchedule {
     private Trip tripDetail;
 
     @OneToMany(mappedBy = "tripSchedule", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+    @JsonBackReference
     private Set<Ticket> tickets = new HashSet<>();
 
     public TripSchedule() {
