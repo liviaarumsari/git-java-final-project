@@ -17,4 +17,8 @@ public class TripSpecs {
     public static Specification<Trip> hasTripDate(LocalDate tripDate) {
         return (trip, cq, cb) -> tripDate == null ? cb.conjunction() : cb.equal(trip.join("tripSchedules").get("tripDate"), tripDate);
     }
+
+    public static Specification<Trip> hasAgencyId(Long agencyId) {
+        return (trip, cq, cb) -> agencyId == null ? cb.conjunction() : cb.equal(trip.get("agency").get("id"), agencyId);
+    }
 }
