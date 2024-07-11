@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -41,6 +42,11 @@ public class TicketController {
         }
 
         TripSchedule tripSchedule = tripScheduleRepository.findById(createTicketRequest.getTripScheduleId()).orElseThrow(() -> new ResourceNotFoundException("Trip schedule not found"));
+
+        LocalDate currentDate = LocalDate.now();
+        if (tripSchedule.getTripDate().isBefore(currentDate)) {
+            return ResponseEntity.badRequest().body(ApiResponseBuilder.buildErrorResponse("Trip date is in the past"));
+        }
 
         Ticket ticket = new Ticket();
         ticket.setPassenger(user);
