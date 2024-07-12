@@ -21,12 +21,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
-    public static final String[] SWAGGER_WHITELIST = {
+    public static final String[] WHITELIST = {
             "/swagger-ui/**",
             "/swagger-ui.html",
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/swagger-resources",
+            "/api/v1/trip",
+            "/api/v1/stop"
     };
 
     @Autowired
@@ -64,7 +66,7 @@ public class WebSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/auth/**").permitAll().requestMatchers(SWAGGER_WHITELIST).permitAll()
+                        auth.requestMatchers("/api/auth/**").permitAll().requestMatchers(WHITELIST).permitAll()
                                 .anyRequest().authenticated()
                 );
 

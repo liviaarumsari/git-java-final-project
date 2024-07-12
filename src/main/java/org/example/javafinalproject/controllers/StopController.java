@@ -26,11 +26,7 @@ public class StopController {
     private UserRepository userRepository;
 
     @GetMapping("")
-    public ResponseEntity<?> getAllStops(Principal principal) {
-        String userEmail = principal.getName();
-        userRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with email: " + userEmail));
-
+    public ResponseEntity<?> getAllStops() {
         List<Stop> stops = stopRepository.findAll();
 
         return ResponseEntity.ok().body(ApiResponseBuilder.buildSuccessResponse(stops));
